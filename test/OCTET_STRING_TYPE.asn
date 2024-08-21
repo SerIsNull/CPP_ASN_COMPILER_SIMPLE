@@ -1,0 +1,3 @@
+Name_t ::= OCTET STRING
+Sergey Name_t ::= '53 65 72 67 65 79'H
+

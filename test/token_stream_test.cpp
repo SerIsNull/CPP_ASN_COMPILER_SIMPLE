@@ -1,8 +1,8 @@
 # include <gtest/gtest.h>
-# include <fstream>
+# include <fixture_test.h>
 
-using src_file = asn_test::asn_src_file;
-TEST_F(src_file testing_tesing)
+using src_file = asn_test::asn_files;
+TEST_F(src_file, testing_tesing)
 {
     ASSERT_TRUE(true);
 }

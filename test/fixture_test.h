@@ -2,31 +2,26 @@
 
 # include <gtest/gtest.h>
 # include <filesystem>
-# include <string_view>
 # include <fstream>
+# include <vector>
+# include <system_error>
+# include <memory>
 
 namespace asn_test
 {
     namespace fs = std::filesystem;
 
-    class asn_src_file : public ::testing::Test
+    class asn_files : public ::testing::Test
     {
-        protected:
-            asn_src_file(fs::path pth = "./asn_src_file.asn");
-    };
-
-    class tlv_type : public ::testing::Test
-    {
-        protected:
-            tlv_type() = default;
         public:
-            using type_t   = std::string_view;
-            using length_t = std::size_t;
-            using value_t  = std::string_view;
-
-            type_t get_type() const;
-            length_t get_length() const;
-            value_t get_value() const;
+            using paths_t = std::vector<fs::path>;
+            using files_t = std::vector<std::unique_ptr<std::fstream>>;
+            static inline paths_t paths;
+            files_t files;
+        protected:
+            asn_files() noexcept(false);
+        private:
+            std::error_code ec;
     };
 } // end namespace test
 

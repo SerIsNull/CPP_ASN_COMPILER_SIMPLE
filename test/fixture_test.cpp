@@ -1,25 +1,29 @@
 # include <fixture_test.h>
 
-// Open src asn file to testing my compiler
-asn_test::asn_src_file::asn_src_file(asn_test::fs::path path_to_src)
+namespace asn_test
 {
-    if(fs::exists(path_to_src))
-        std::clog << "FILE IS EXIST!\n";
-}
+    // Open src asn file to testing my compiler
+    asn_files::asn_files() noexcept(false)
+    {
+        try
+        {
+            // Check that all files exist
+            for( const auto& path : asn_files::paths)
+                if(!fs::exists(path, ec))
+                    throw fs::filesystem_error("src files for test was't exist!!!", ec);
 
-// There are getters for TLV.
-asn_test::tlv_type::type_t asn_test::tlv_type::get_type() const
-{
-    return "INTEGER";
-}
+        }
+        catch(const fs::filesystem_error& err)
+        {
+            std::cerr << "err " << err.code() << " " << err.what() << '\n';
+        }
 
-asn_test::tlv_type::length_t asn_test::tlv_type::get_length() const
-{
-    return 1;
-}
+        // Open all the files
+        for( const auto& path : asn_files::paths)
+            files.emplace_back(std::make_unique<std::fstream>(path, std::ios_base::in));
+    }
 
-asn_test::tlv_type::value_t asn_test::tlv_type::get_value() const
-{
-    return "-2";
-}
+    
+} // namespace
+
 

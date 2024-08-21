@@ -12,7 +12,7 @@ project(asn_encoder
 )
 
 # c++17 is necessary for builing (for all targets in this project)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set all the necessary flags for compiler

@@ -1,9 +1,17 @@
+#include <token.h>
 # include <token_stream.h>
-# include <iostream>
-void asn_compiler::token_stream::operator<<(const std::fstream& src_asn_file) const
+
+void asn_compiler::token_stream_t::operator<<(std::ifstream &src_file) noexcept
 {
-    // TODO
-    std::clog << "Operator << was called!\n";
+    // Pos for getting token
+    pos_n  = src_file.tellg();
+    line_n = 1;
+
+    while(!src_file.eof() and token.type != token_types::unknown)
+    {
+        std::clog << "token_stream_t::operator << " << '\n';
+        src_file.get();
+    }
 }
 
 

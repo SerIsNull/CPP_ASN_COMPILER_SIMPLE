@@ -3,6 +3,7 @@ set(SOURCES
     token_stream.cpp
     fixture_test.cpp
     main_test.cpp
+    token_stream_test.cpp
 )
 
 # set names of header files
@@ -12,18 +13,8 @@ set(HEADERS
 )
 
 # set src files.asn for testing
-set(ASN_FILES
-    INTEGER_TYPE.asn
-    OCTET_STRING_TYPE.asn
-)
-
-# add full path for src files.asn
-list(TRANSFORM ASN_FILES PREPEND ${CMAKE_CURRENT_SOURCE_DIR}/)
-
-# DBG Print 
-foreach( f IN LISTS ASN_FILES)
-    message("file is " ${f})
-endforeach()
+set(INTEGER_TYPE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/INTEGER_TYPE.asn)
+set(OCTET_STRING_TYPE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/OCTET_STRING_TYPE.asn)
 
 # create the target for testing class token_stream
 add_executable(token_stream_test ${CMAKE_SOURCE_DIR}/src/${SOURCES})
@@ -43,11 +34,11 @@ target_link_libraries(token_stream_test gtest)
 
 
 # add suit test #1. Test class token_stream
-add_test(NAME token_stream_test
-    COMMAND $<TARGET_FILE:token_stream_test> "${ASN_FILES}"
+add_test(NAME token_stream_t_test
+    COMMAND $<TARGET_FILE:token_stream_test> "${INTEGER_TYPE_FILE}" "${OCTET_STRING_TYPE_FILE}"
 )
 
-# auto run all suit tests just after building.
+# auto run all suit tests just after building
 add_custom_command(TARGET token_stream_test
     POST_BUILD
     COMMAND ${CMAKE_CTEST_COMMAND} --V --output-on-failure

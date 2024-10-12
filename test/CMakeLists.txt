@@ -16,9 +16,6 @@ set(HEADERS
 )
 
 list(TRANSFORM SOURCES PREPEND ${CMAKE_SOURCE_DIR}/src/ AT 0 1)
-foreach(elem IN LISTS SOURCES)
-    message(${elem})
-endforeach()
 
 # set src files.asn for testing
 set(INTEGER_TYPE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/INTEGER_TYPE.asn)

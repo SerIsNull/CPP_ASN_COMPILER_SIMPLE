@@ -39,6 +39,13 @@ namespace asn_compiler
         ss_buf.setstate(std::ios_base::eofbit);
     }
 
+    void token_stream_t::skeep_spaces() noexcept
+    {
+        char ch{'\0'};
+        while(ss_buf.get(ch) and std::isspace(ch)) {}
+        ss_buf.putback(ch);
+    }
+
     void token_stream_t::putback(token_t::value_t)
     {
         return;
@@ -84,8 +91,10 @@ namespace asn_compiler
             {
                 std::cerr << "======= buffer is empty! Fill it!\n";
                 ss_buf.str(std::move(read_new_buf()));
-                std::cerr << "======= buf : " << ss_buf.str() << '\n';
+                std::cerr << "======= after fill buffer == " << ss_buf.str() << '\n';
             }
+            
+            skeep_spaces();
             
             // check the rules
 

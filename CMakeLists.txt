@@ -6,7 +6,7 @@ cmake_policy(VERSION 3.16.3)
 
 # set project name
 project(asn_encoder
-    VERSION 0.0.3
+    VERSION 0.0.4
     DESCRIPTION "This is an asn-compiler simple!"
     LANGUAGES CXX
 )

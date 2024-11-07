@@ -38,7 +38,7 @@ TEST_F(src_files, token_stream_t_return_valid_)
 
     asn_compiler::token_t tok;
 
-    for(std::size_t i{0}; i < 3; i++)
+    for(std::size_t i{0}; i < 4; i++)
     {
         ts >> tok;
         print_dbg(tok);

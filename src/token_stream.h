@@ -31,9 +31,11 @@ namespace asn_compiler
         token_t::value_t read_new_buf();
         // This method for getting next line from src file
         token_t::value_t get_next_line();
+        // This method skeeps spaces
+        void skeep_spaces() noexcept;
         // This method for returning word or line into the src file
         void putback(token_t::value_t );
-        // This metod for checkin rules for each token
+        // This metod for checking rules for each token
         std::optional<std::pair<token_t::value_t, token_t::pos_t>> check_rules_for(token_t::type_t);
 
         std::fstream      src_f;

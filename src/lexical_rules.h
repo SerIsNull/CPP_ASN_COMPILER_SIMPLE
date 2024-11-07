@@ -19,6 +19,7 @@ namespace asn_compiler
         virtual std::optional<val_pos_t> check(std::stringstream &) = 0;
         protected:
         void throw_away(std::stringstream &buf, std::size_t n);
+        void restore_state(std::stringstream &buf, token_t::pos_t old_pos) noexcept;
     };
 
     // There are rules for the token type: "type"
@@ -40,7 +41,7 @@ namespace asn_compiler
         virtual ~oper_rules() override {}
         virtual std::optional<val_pos_t> check(std::stringstream & buf) override final;
         private:
-        std::array<token_t::value_t,1> values{{"::="}};       
+        std::array<token_t::value_t,1> values{{"::="}};
     };
 
     // There are rules for the token type : "allias_type"

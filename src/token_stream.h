@@ -1,10 +1,13 @@
 # ifndef __TOKEN_STREAM_T__
 # define __TOKEN_STREAM_T__
+#include <functional>
 # include <iostream>
 # include <sstream>
 # include <fstream>
 # include <token.h>
 # include <optional>
+# include <lexical_rules.h>
+# include <memory>
 
 namespace asn_compiler
 {
@@ -16,6 +19,9 @@ namespace asn_compiler
         token_stream_t(token_stream_t && ) = delete;
         token_stream_t& operator=(const token_stream_t& ) = delete;
         token_stream_t& operator=(token_stream_t&& ) = delete;
+
+        //Types
+        using rules_t = std::array<std::unique_ptr<IRules>,4>;
 
         // Interface for the syntax analizer
         // This method for getting one token
@@ -35,8 +41,6 @@ namespace asn_compiler
         void skeep_spaces() noexcept;
         // This method for returning word or line into the src file
         void putback(token_t::value_t );
-        // This metod for checking rules for each token
-        std::optional<std::pair<token_t::value_t, token_t::pos_t>> check_rules_for(token_t::type_t);
 
         std::fstream      src_f;
         std::streampos    pos_file{0};
@@ -44,6 +48,8 @@ namespace asn_compiler
         std::stringstream ss_buf;
         std::streampos    pos_buf{0};
         token_t           token;
+        rules_t rules;
+
     };
 } // end namespace
 

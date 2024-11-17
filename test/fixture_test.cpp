@@ -7,17 +7,17 @@ namespace token_stream_test
         : valid_tokens
           {
               // str number 1. INTEGER_TYPE.asn
-              {asn_compiler::token_types_t::allias_type, "Temperature_t", 1},
-              {asn_compiler::token_types_t::oper, "::=", 1},
-              {asn_compiler::token_types_t::type, "INTEGER", 1},
-              {asn_compiler::token_types_t::semicolon, ";", 1},
+              {asn_compiler::token_types_t::allias_type, "Temperature_t", 1, 1},
+              {asn_compiler::token_types_t::oper, "::=", 1, 15},
+              {asn_compiler::token_types_t::type, "INTEGER", 1, 19},
+              {asn_compiler::token_types_t::semicolon, ";", 1, 26},
 
               // str number 2. INTEGER_TYPE.asn
-              {asn_compiler::token_types_t::identificator, "TemperatureToday", 2},
-              {asn_compiler::token_types_t::allias_type, "Temperature_t", 2},
-              {asn_compiler::token_types_t::oper, "::=", 2},
-              {asn_compiler::token_types_t::literal, "-2", 2},
-              {asn_compiler::token_types_t::semicolon, ";", 2},
+              {asn_compiler::token_types_t::identificator, "TemperatureToday", 2, 1},
+              {asn_compiler::token_types_t::allias_type, "Temperature_t", 2, 18},
+              {asn_compiler::token_types_t::oper, "::=", 2, 32},
+              {asn_compiler::token_types_t::literal, "-2", 2, 36},
+              {asn_compiler::token_types_t::semicolon, ";", 2, 39},
           }
     {
         try
@@ -25,7 +25,7 @@ namespace token_stream_test
             // Check that all files exist
             for( const auto& path : paths)
                 if(!fs::exists(path, ec))
-                    throw fs::filesystem_error("Fixture asn_files : there're weren't exist!!!", ec);
+                    throw fs::filesystem_error("Fixture asn_files : they are weren't exist!!!", ec);
 
         }
         catch(const fs::filesystem_error& err)

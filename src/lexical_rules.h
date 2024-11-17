@@ -8,17 +8,17 @@ namespace asn_compiler
     class IRules
     {
         public:
-        using val_pos_t = std::pair<token_t::value_t, token_t::pos_t>;
+        using val_type_pos_t = struct { token_t::value_t val; token_t::type_t type; token_t::pos_t pos;};
         IRules() = default;
         IRules(const IRules & ) = delete;
         IRules & operator=(const IRules & ) = delete;
         IRules(IRules && ) = delete;
         IRules & operator=(IRules && ) = delete;
         virtual ~IRules() = default;
+        virtual std::optional<val_type_pos_t> check(std::stringstream &) = 0;
 
-        virtual std::optional<val_pos_t> check(std::stringstream &) = 0;
         protected:
-        void throw_away(std::stringstream &buf, std::size_t n);
+        void throw_away(std::stringstream &buf, token_t::pos_t start_pos, std::size_t n) noexcept;
         void restore_state(std::stringstream &buf, token_t::pos_t old_pos) noexcept;
     };
 
@@ -28,7 +28,7 @@ namespace asn_compiler
         public:
         type_rules() = default;
         virtual ~type_rules() override {}
-        virtual std::optional<val_pos_t> check(std::stringstream & buf) override final;
+        virtual std::optional<val_type_pos_t> check(std::stringstream & buf) override final;
         private:
         std::array<token_t::value_t,2> values{{"INTEGER","OCTET STRING"}};
     };
@@ -39,7 +39,7 @@ namespace asn_compiler
         public:
         oper_rules() = default;
         virtual ~oper_rules() override {}
-        virtual std::optional<val_pos_t> check(std::stringstream & buf) override final;
+        virtual std::optional<val_type_pos_t> check(std::stringstream & buf) override final;
         private:
         std::array<token_t::value_t,1> values{{"::="}};
     };
@@ -50,7 +50,7 @@ namespace asn_compiler
         public:
         allias_rules() = default;
         virtual ~allias_rules() override {}
-        virtual std::optional<val_pos_t> check(std::stringstream & buf) override final;
+        virtual std::optional<val_type_pos_t> check(std::stringstream & buf) override final;
     };
 
     // There are rules for the token type : "semicolon"
@@ -59,9 +59,9 @@ namespace asn_compiler
         public:
         semicolon_rules() = default;
         virtual ~semicolon_rules() override {}
-        virtual std::optional<val_pos_t> check(std::stringstream & buf) override final;
+        virtual std::optional<val_type_pos_t> check(std::stringstream & buf) override final;
         private:
-        token_t::value_t::value_type value{';'};
+        token_t::value_t value{";"};
     };
 } // end namespace
 # endif // end of header guard

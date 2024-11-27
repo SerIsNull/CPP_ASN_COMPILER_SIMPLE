@@ -48,7 +48,7 @@ namespace asn_compiler
         std::stringstream ss_buf;
         std::streampos    pos_buf{0};
         token_t           token;
-        rules_t rules;
+        rules_t           rules;
 
     };
 } // end namespace

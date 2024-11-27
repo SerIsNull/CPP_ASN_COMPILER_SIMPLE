@@ -2,7 +2,7 @@
 
 namespace asn_compiler
 {
-    void IRules::throw_away(std::stringstream &buf, token_t::pos_t start_pos, std::size_t n) noexcept
+    void IRules::throw_away(std::stringstream & buf, token_t::pos_t start_pos, std::size_t n) noexcept
     {
         buf.seekp(start_pos);
         while(n--) buf.put(' ');
@@ -20,7 +20,7 @@ namespace asn_compiler
     {
         std::cerr << "=In check_rules_for_type\n";
         token_t::pos_t old_pos {buf.tellg()};
-        token_t::value_t tok_val{}, assign_op{};
+        token_t::value_t tok_val{};
         if(buf >> tok_val)
         {
             for(const auto & value : values)

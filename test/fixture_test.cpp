@@ -25,7 +25,7 @@ namespace token_stream_test
             // Check that all files exist
             for( const auto& path : paths)
                 if(!fs::exists(path, ec))
-                    throw fs::filesystem_error("Fixture asn_files : they are weren't exist!!!", ec);
+                    throw fs::filesystem_error("Fixture asn_files : Files weren't exist!!!", ec);
 
         }
         catch(const fs::filesystem_error& err)

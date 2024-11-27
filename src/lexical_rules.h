@@ -18,7 +18,7 @@ namespace asn_compiler
         virtual std::optional<val_type_pos_t> check(std::stringstream &) = 0;
 
         protected:
-        void throw_away(std::stringstream &buf, token_t::pos_t start_pos, std::size_t n) noexcept;
+        void throw_away(std::stringstream & buf, token_t::pos_t start_pos, std::size_t n) noexcept;
         void restore_state(std::stringstream &buf, token_t::pos_t old_pos) noexcept;
     };
 

@@ -13,7 +13,11 @@ namespace asn_compiler
         pos_file {src_file.tellg()},
         line_num {0},
         pos_buf  {0},
-        rules{{std::make_unique<semicolon_rules>(), std::make_unique<type_rules>(), std::make_unique<oper_rules>(), std::make_unique<allias_rules>()}}
+        rules
+        {{
+                std::make_unique<semicolon_rules>(), std::make_unique<type_rules>(),
+                std::make_unique<oper_rules>(), std::make_unique<allias_rules>()
+        }}
     {
         std::cerr << "token_stream_t::ctor(): The initialization was successful!" << '\n';
         ss_buf.setstate(std::ios_base::eofbit);
@@ -80,65 +84,6 @@ namespace asn_compiler
                 }
             }
             return;
-/*
-            
-            // check the rules
-            if(auto val_type_pos = check(semicolon_rules());
-                    val_pos.has_value())
-            {
-                std::cerr << "=============================================\n";
-                std::cerr << "!!!token type = semicolon \n";
-                std::cerr << "rest getting pos for lexical analizer == " << ss_buf.tellg() << '\n';
-                std::cerr << "rest put pos for lexical analizer == " << ss_buf.tellp() << '\n';
-                std::cerr << "=============================================\n";
-                return;
-            }
-            else if(auto val_pos = check(allias_rules());
-                    val_pos.has_value())
-            {
-                std::cerr << "=============================================\n";
-                std::cerr << "!!!token type = allias type \n";
-                out_token.type   = token_types_t::allias_type;
-                out_token.line_n = line_num;
-                out_token.value  = val_pos->first;
-                out_token.pos_n  = val_pos->second;
-                std::cerr << "rest getting pos for lexical analizer == " << ss_buf.tellg() << '\n';
-                std::cerr << "rest put pos for lexical analizer == " << ss_buf.tellp() << '\n';
-                std::cerr << "=============================================\n";
-                return;
-            }
-            else if(auto val_pos = check(oper_rules());
-                    val_pos.has_value())
-            {
-                std::cerr << "=============================================\n";
-                std::cerr << "!!!token type = oper \n";
-                out_token.type   = token_types_t::oper;
-                out_token.line_n = line_num;
-                out_token.value  = val_pos->first;
-                out_token.pos_n  = val_pos->second;
-                std::cerr << "rest getting pos for lexical analizer == " << ss_buf.tellg() << '\n';
-                std::cerr << "rest put pos for lexical analizer == " << ss_buf.tellp() << '\n';
-                std::cerr << "=============================================\n";
-                return;
-            }
-            else if(auto val_pos = check(type_rules());
-                    val_pos.has_value())
-            {
-                std::cerr << "=============================================\n";
-                std::cerr << "!!!token type = type \n";
-                out_token.type   = token_types_t::type;
-                out_token.line_n = line_num;
-                out_token.value  = val_pos->first;
-                out_token.pos_n  = val_pos->second;
-                std::cerr << "rest getting pos for lexical analizer == " << ss_buf.tellg() << '\n';
-                std::cerr << "rest put pos for lexical analizer == " << ss_buf.tellp() << '\n';
-                std::cerr << "=============================================\n";
-                return;
-            }
-            else
-            {
-                return;
-            } */
         }// while
     }
 }// end namespace 

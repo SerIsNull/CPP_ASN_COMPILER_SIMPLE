@@ -1,0 +1,2 @@
+Temperature_t ::= INTEGER;
+TemperatureToday Temperature_t ::= -20;

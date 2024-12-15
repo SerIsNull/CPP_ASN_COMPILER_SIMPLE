@@ -2,23 +2,21 @@
 
 namespace asn_compiler
 {
-    void IRules::throw_away(std::stringstream & buf, token_t::pos_t start_pos, std::size_t n) noexcept
+    void IRules::set_pos(std::stringstream & buf, token_t::pos_t p) noexcept
     {
-        buf.seekp(start_pos);
-        while(n--) buf.put(' ');
-        buf.seekg(buf.tellp());
+      buf.seekg(p);
+      buf.seekp(p);
     }
 
-    void IRules::restore_state(std::stringstream &buf, token_t::pos_t old_pos) noexcept
+    void IRules::throw_away(std::stringstream & buf, std::size_t n) noexcept
     {
-      if(!buf) buf.clear(); 
-      buf.seekg(old_pos);
-      buf.seekp(old_pos);
+        while(n--) buf.put(0x20);
+        set_pos(buf, buf.tellp());
     }
-    
-    std::optional<IRules::val_type_pos_t> type_rules::check(std::stringstream & buf)
+
+    std::optional<IRules::res_t> type_rules::check(std::stringstream & buf)
     {
-        std::cerr << "=In check_rules_for_type\n";
+        std::cerr << "\t========> In check_rules_for_type\n";
         token_t::pos_t old_pos {buf.tellg()};
         token_t::value_t tok_val{};
         if(buf >> tok_val)
@@ -27,19 +25,21 @@ namespace asn_compiler
             {
                 if(tok_val == value)
                 {
-                    std::cerr << "Yay. This is TYPE\n";
-                    throw_away(buf, old_pos, tok_val.size());
+                    std::cerr << "\t========> Yay. This is TYPE\n";
+                    set_pos(buf, old_pos);
+                    throw_away(buf, tok_val.size());
                     return {{tok_val, token_t::type_t::type, old_pos}};
                 }
             }
+            buf.clear();
+            set_pos(buf, old_pos);
         }
-        restore_state(buf, old_pos);
         return std::nullopt;
     }
 
-    std::optional<IRules::val_type_pos_t> oper_rules::check(std::stringstream & buf)
+    std::optional<IRules::res_t> oper_rules::check(std::stringstream & buf)
     {   
-        std::cerr << "=In check_rules_for_oper_type\n";
+        std::cerr << "\t========> In check_rules_for_oper_type\n";
         token_t::pos_t old_pos {buf.tellg()};
         token_t::value_t tok_val{};
 
@@ -49,35 +49,39 @@ namespace asn_compiler
             {
                 if(tok_val == value)
                 {
-                    std::cerr << "Yay. This is OPER\n";
-                    throw_away(buf, old_pos, value.size());
+                    std::cerr << "\t========> Yay. This is OPER\n";
+                    set_pos(buf, old_pos);
+                    throw_away(buf, value.size());
                     return {{tok_val, token_t::type_t::oper, old_pos}};
                 }
             }
+            buf.clear();
+            set_pos(buf, old_pos);
         }
-        restore_state(buf, old_pos);
         return std::nullopt;
     }
 
-    std::optional<IRules::val_type_pos_t> allias_rules::check(std::stringstream & buf)
+    std::optional<IRules::res_t> allias_rules::check(std::stringstream & buf)
     {
-        std::cerr << "=In check_rules_for_allias_type\n";
+        std::cerr << "\t========> In check_rules_for_allias_type\n";
         // allias or type must be before operator ::=   
         token_t::pos_t old_pos {buf.tellg()};
         token_t::value_t tok_val{}, assign_op{};
-        if(buf >> tok_val and buf >> assign_op and assign_op == "::=" )
+        if(buf >> tok_val and buf >> assign_op and assign_op == "::=") 
         {
-            std::cerr << "Yay. This is ALLIAS\n";
-            throw_away(buf, old_pos, tok_val.size());
+            std::cerr << "\t========> Yay. This is ALLIAS\n";
+            set_pos(buf, old_pos);
+            throw_away(buf, tok_val.size());
             return {{tok_val, token_t::type_t::allias_type, old_pos}};
         }
-        restore_state(buf, old_pos);
+        buf.clear();
+        set_pos(buf, old_pos);
         return std::nullopt;
     }
 
-    std::optional<IRules::val_type_pos_t> semicolon_rules::check(std::stringstream & buf)
+    std::optional<IRules::res_t> semicolon_rules::check(std::stringstream & buf)
     {
-        std::cerr << "=In check_rules_for_semicolon\n";
+        std::cerr << "\t========> In check_rules_for_semicolon\n";
         token_t::pos_t old_pos {buf.tellg()};
         token_t::value_t tok_val{};
         // move to the end
@@ -86,13 +90,16 @@ namespace asn_compiler
 
         if(buf >> tok_val and tok_val == value)
         {
-            std::cerr << "Yay. This is SEMICOLON\n";
-            restore_state(buf, end_pos);
-            throw_away(buf, end_pos, 1);
-            restore_state(buf, old_pos);
+            std::cerr << "\t========> Yay. This is SEMICOLON\n";
+            buf.clear();
+            set_pos(buf, end_pos);
+            throw_away(buf, 1);
+            //buf.clear();
+            set_pos(buf, old_pos);
             return {{tok_val, token_t::type_t::semicolon, end_pos}};
         }
-        restore_state(buf, old_pos);
+        buf.clear();
+        set_pos(buf, old_pos);
         return std::nullopt;
     }
 } // end namespace

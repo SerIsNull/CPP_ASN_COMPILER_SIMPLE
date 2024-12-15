@@ -37,7 +37,6 @@ target_link_options(token_stream_test PRIVATE
 # add gtest library for linker
 target_link_libraries(token_stream_test gtest)
 
-
 # add suit test #1. Test class token_stream
 add_test(NAME token_stream_t_test
     COMMAND $<TARGET_FILE:token_stream_test> "${INTEGER_TYPE_FILE}" "${OCTET_STRING_TYPE_FILE}"

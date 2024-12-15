@@ -29,7 +29,7 @@ namespace asn_compiler
             using value_t = std::string;
             using pos_t   = std::streampos;
             using line_t  = std::streamsize;
-            type_t          type;
+            type_t          type{type_t::unknown};
             value_t         value {""};
             line_t          line_n{0};
             pos_t           pos_n{0};

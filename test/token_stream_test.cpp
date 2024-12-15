@@ -47,15 +47,16 @@ auto print_dbg
     }
 };
             
-TEST_F(src_files, token_stream_t_return_valid_token)
+TEST_F(src_files, token_stream_t_return_valid_tokens)
 {
     asn_compiler::token_stream_t ts(std::move(files[0]));
 
     asn_compiler::token_t tok;
-
-    for(std::size_t i{0}; i < 4; i++)
+    std::size_t n {5};
+    while( n -- )
     {
         ts >> tok;
+
         print_dbg(tok);
     }
 

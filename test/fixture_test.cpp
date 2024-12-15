@@ -32,7 +32,7 @@ namespace token_stream_test
         {
             std::cerr << "err " << err.code() << " " << err.what() << '\n';
         }
-        // Open all the src files.asn for testing
+        // Open all src.files and put it into array for next testing
         for( const auto& path : paths)
             files.emplace_back(path, std::ios_base::in | std::ios_base::out);
     }

@@ -14,76 +14,88 @@ namespace asn_compiler
         line_num {0},
         pos_buf  {0},
         rules
-        {{
-                std::make_unique<semicolon_rules>(), std::make_unique<type_rules>(),
-                std::make_unique<oper_rules>(), std::make_unique<allias_rules>()
-        }}
+        {
+            {
+                std::make_unique<semicolon_rules>(),
+                std::make_unique<type_rules>(),
+                std::make_unique<oper_rules>(),
+                std::make_unique<allias_rules>()
+            }
+        }
     {
         std::cerr << "token_stream_t::ctor(): The initialization was successful!" << '\n';
         ss_buf.setstate(std::ios_base::eofbit);
     }
 
-    token_t::value_t token_stream_t::get_next_line()
+    bool token_stream_t::is_empty() const 
     {
-        token_t::value_t str{};
-        // save pos before reading
-        pos_file = src_f.tellg();
-        std::getline(src_f, str, '\n');
-        if(!str.empty())
-            line_num++;
-        return str;
+            for( char ch : ss_buf.str() )
+            {
+                if(ch != 0x20)
+                    return false;
+            }
+            return true;
     }
 
-    token_t::value_t token_stream_t::read_new_buf()
+    token_stream_t::operator bool() const
+    {
+       return !ss_buf.eof() or is_empty();
+    }
+
+    token_t::value_t token_stream_t::read_new_line()
     {
         if(!src_f.eof())
         {
             ss_buf.clear();
-            return get_next_line();
+            token_t::value_t str{};
+            // save pos before reading
+            pos_file = src_f.tellg();
+            std::getline(src_f, str, '\n');
+            if(!str.empty())
+            {
+                line_num++;
+                return str;
+            }
         }
-        ss_buf.setstate(std::ios_base::eofbit);
+        std::clog << "eof()" << '\n';
+        return {};
     }
 
-    void token_stream_t::skeep_spaces() noexcept
+    void token_stream_t::skip_ws() noexcept
     {
         char ch{'\0'};
         while(ss_buf.get(ch) and std::isspace(ch)) {}
         ss_buf.putback(ch);
     }
 
-    void token_stream_t::putback(token_t::value_t)
+    token_stream_t & token_stream_t::operator>>(token_t & out_token) noexcept
     {
-        return;
-    }
-
-    void token_stream_t::operator>>(token_t & out_token) noexcept
-    {
-        while(!src_f.eof() or !ss_buf.eof())
+        while(!ss_buf.eof() or !src_f.eof())
         {
             // fill the buffer
-            if(ss_buf.eof())
+            if(ss_buf.eof() or is_empty())
             {
                 std::cerr << "======= buffer is empty! Fill it!\n";
-                ss_buf.str(std::move(read_new_buf()));
+                ss_buf.str(std::move(read_new_line()));
                 std::cerr << "======= after fill buffer == " << ss_buf.str() << '\n';
             }
             
-            skeep_spaces();
+            skip_ws();
 
-            for ( auto it {rules.begin()}; it != rules.end(); ++it)
+            for ( auto it { rules.begin()}; it != rules.end(); ++it )
             {
-                if (auto val_type_pos = (*it)->check(ss_buf);
-                val_type_pos )
+                if (auto val_type_pos = (*it)->check(ss_buf); val_type_pos )
                 {
-                    std::cerr << "-->Rest of buffer == " << ss_buf.str() << '\n';
+                    std::cerr << "=======> Rest of buffer == " << ss_buf.str() << '\n';
                     out_token.value  = val_type_pos->val;
                     out_token.type   = val_type_pos->type;
                     out_token.pos_n  = val_type_pos->pos;
                     out_token.line_n = line_num;
-                    return;
+                    return *this;
                 }
-            }
-            return;
-        }// while
+            } // end rules
+            return *this;
+        }// end while
+    return *this;
     }
 }// end namespace 

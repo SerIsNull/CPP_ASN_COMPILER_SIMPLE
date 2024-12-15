@@ -1,9 +1,9 @@
 # include <fixture_test.h>
 
-namespace token_stream_test
+namespace asn_compiler_test
 {
     // Try ti open some input src files.asn for testing
-    token_stream_test::asn_files::asn_files() noexcept(false)
+    fixture::fixture() noexcept(false)
         : valid_tokens
           {
               // str number 1. INTEGER_TYPE.asn

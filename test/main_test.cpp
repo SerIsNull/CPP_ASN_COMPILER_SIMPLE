@@ -1,4 +1,3 @@
-#include "gtest/gtest.h"
 # include <fixture_test.h>
 # include <gtest/gtest.h>
 # include <iostream>
@@ -11,9 +10,9 @@ int main(int carg, char **argv)
     for(std::size_t i{1}; i < carg; i++)
     {
         std::cout << "\t===> put path["<< i << "] for testing  == " << argv[i] << '\n';
-        token_stream_test::asn_files::paths.emplace_back(argv[i]);
+        asn_compiler_test::fixture::paths.emplace_back(argv[i]);
     }
-
+    std::clog << "\t===> Init path was success!\n";
    ::testing::InitGoogleTest(&carg, argv);
    return RUN_ALL_TESTS();
 }

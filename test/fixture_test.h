@@ -6,13 +6,13 @@
 # include <system_error>
 # include <token.h>
 
-namespace token_stream_test
+namespace asn_compiler_test
 {
     namespace fs = std::filesystem;
 
     // Butch of files for testing.
     // ALl paths set in the tests/CmakeListst.txt
-    class asn_files : public ::testing::Test
+    class fixture: public ::testing::Test
     {
         public:
             using paths_t = std::vector<fs::path>;
@@ -22,7 +22,7 @@ namespace token_stream_test
             files_t files;
             valid_tokens_t valid_tokens;
         protected:
-            asn_files() noexcept(false);
+            fixture() noexcept(false);
         private:
             std::error_code ec;
     };

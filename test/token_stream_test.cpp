@@ -1,9 +1,8 @@
-# include <gtest/gtest.h>
-# include <fixture_test.h>
-# include <token_stream.h>
+#include <fixture_test.h>
+#include <token_stream.h>
 #include <ios>
 
-using src_files = token_stream_test::asn_files;
+using tests_asn_compiler = asn_compiler_test::fixture;
 
 auto print_dbg
 {
@@ -47,7 +46,7 @@ auto print_dbg
     }
 };
             
-TEST_F(src_files, token_stream_t_return_valid_tokens)
+TEST_F(tests_asn_compiler, token_stream_t_return_valid_tokens)
 {
     asn_compiler::token_stream_t ts(std::move(files[0]));
 

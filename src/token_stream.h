@@ -1,13 +1,13 @@
-# ifndef __TOKEN_STREAM_T__
-# define __TOKEN_STREAM_T__
+#ifndef __TOKEN_STREAM_T__
+#define __TOKEN_STREAM_T__
 #include <functional>
-# include <iostream>
-# include <sstream>
-# include <fstream>
-# include <token.h>
-# include <optional>
-# include <lexical_rules.h>
-# include <memory>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <token.h>
+#include <optional>
+#include <lexical_rules.h>
+#include <memory>
 
 namespace asn_compiler
 {
@@ -46,5 +46,5 @@ namespace asn_compiler
     };
 } // end namespace
 
-# endif // end header-guard
+#endif // end header-guard
 
